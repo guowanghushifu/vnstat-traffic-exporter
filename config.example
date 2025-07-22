@@ -1,0 +1,21 @@
+# vnstat流量导出器配置示例
+# 
+# 使用方法：
+# 1. 复制此文件的内容
+# 2. 在启动脚本前设置环境变量，或者修改start.sh中的默认值
+
+# Webhook路径（包含安全token）
+# export WEBHOOK_PATH=/webhook/secret-0c68fb14-bb0d-41ca-a53f-a8ba0ea08fae
+
+# 每月统计起始日期（1-31）
+# 例如：设置为15表示从每月15号开始统计
+# export START_DAY=1
+
+# Web服务端口
+# export PORT=50000
+
+# 使用示例：
+# export WEBHOOK_PATH="/webhook/my-custom-path"
+# export START_DAY="15"
+# export PORT="8080"
+# ./start.sh 

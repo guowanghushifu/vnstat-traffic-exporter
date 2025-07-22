@@ -1,0 +1,42 @@
+services:
+  vnstat-exporter:
+    build: .
+    image: vnstat-traffic-exporter:latest
+    container_name: vnstat-exporter
+    
+    # 使用host网络模式以访问物理网卡数据
+    network_mode: host
+    
+    # 挂载vnstat数据库目录以持久化历史数据
+    volumes:
+      - /var/lib/vnstat:/var/lib/vnstat:ro
+      - /etc/vnstat.conf:/etc/vnstat.conf:ro
+    
+    # 环境变量配置
+    environment:
+      - WEBHOOK_PATH=/webhook/secret-0c68fb14-bb0d-41ca-a53f-a8ba0ea08fae
+      - START_DAY=19
+      - PORT=50000
+    
+    # 设置必要的权限以访问网络信息
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    
+    # 自动重启
+    restart: unless-stopped
+    
+    # 健康检查（每10分钟一次）
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:50000/health')"]
+      interval: 10m
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # 日志配置（限制日志文件大小）
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3" 
