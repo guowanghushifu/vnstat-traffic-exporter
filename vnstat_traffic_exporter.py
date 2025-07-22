@@ -81,7 +81,7 @@ class VnstatTrafficExporter:
             
             # 解析输出，格式: "Available interfaces: eth0 docker0"
             output = result.stdout.strip()
-            logger.info(f"vnstat --iflist 输出: {output}")
+            logger.debug(f"vnstat --iflist 输出: {output}")
             
             if 'Available interfaces:' not in output:
                 logger.warning("vnstat输出格式不符合预期")
@@ -91,7 +91,7 @@ class VnstatTrafficExporter:
             interface_part = output.split('Available interfaces:')[1].strip()
             interfaces = interface_part.split()
             
-            logger.info(f"发现的接口: {interfaces}")
+            logger.debug(f"发现的接口: {interfaces}")
             
             # 过滤和排序接口
             preferred_interfaces = []
@@ -115,12 +115,12 @@ class VnstatTrafficExporter:
             # 优先选择物理网卡接口
             for iface in preferred_interfaces:
                 if iface.startswith(('eth', 'ens', 'enp', 'en', 'wlan', 'wlp')):
-                    logger.info(f"选择网络接口: {iface}")
+                    logger.debug(f"选择网络接口: {iface}")
                     return iface
             
             # 如果没有找到标准命名的接口，选择第一个
             selected = preferred_interfaces[0]
-            logger.info(f"选择网络接口: {selected}")
+            logger.debug(f"选择网络接口: {selected}")
             return selected
             
         except subprocess.TimeoutExpired:
@@ -143,11 +143,11 @@ class VnstatTrafficExporter:
             if interface:
                 # 使用指定接口获取流量数据
                 cmd = ['vnstat', '-i', interface, '--begin', start_date_str, '--end', end_date_str, '--json']
-                logger.info(f"使用接口 {interface} 获取流量数据")
+                logger.debug(f"使用接口 {interface} 获取流量数据")
             else:
                 # 使用默认命令（所有接口）
                 cmd = ['vnstat', '--begin', start_date_str, '--end', end_date_str, '--json']
-                logger.info("使用默认命令获取流量数据")
+                logger.debug("使用默认命令获取流量数据")
             
             logger.info(f"执行vnstat命令: {' '.join(cmd)}")
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)

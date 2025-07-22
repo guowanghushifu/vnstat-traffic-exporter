@@ -17,7 +17,8 @@ services:
       - WEBHOOK_PATH=/webhook/secret-0c68fb14-bb0d-41ca-a53f-a8ba0ea08fae
       - START_DAY=19
       - PORT=50000
-    
+      - TZ=Asia/Shanghai
+
     # 设置必要的权限以访问网络信息
     cap_add:
       - NET_ADMIN
