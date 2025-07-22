@@ -35,7 +35,7 @@ services:
     
     # 健康检查（每10分钟一次）
     healthcheck:
-      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:50000/health')"]
+      test: ["CMD-SHELL", "curl -fs http://localhost:${PORT:-50000}/health || exit 1"]
       interval: 10m
       timeout: 10s
       retries: 3
